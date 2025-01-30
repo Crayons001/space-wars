@@ -353,6 +353,9 @@ def game_loop():
                 missile.status = "ready"
                 game.score += 100  # Increasing score
                 game.show_status()
+                # Explosion
+                for particle in enemy_particles:
+                    particle.explode(missile.xcor(), missile.ycor())
 
         # Handle allies
         for ally in allies:
@@ -364,9 +367,18 @@ def game_loop():
                 missile.status = "ready"
                 game.score -= 50  # Penalty for hitting an ally
                 game.show_status()
+                # Explosion
+                for particle in ally_particles:
+                    particle.explode(missile.xcor(), missile.ycor())
 
                 if player.lives <= 0 or game.score <= 0:
                     game.state = "gameover"
+        
+        for particle in enemy_particles:
+            particle.move()
+
+        for particle in ally_particles:
+            particle.move()
 
     # Exit the game loop and call game over
     if game.state == "gameover":
